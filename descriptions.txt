@@ -1,0 +1,38 @@
+Living Room:
+"Moonlight filters through dusty windows, casting long shadows across Victorian furniture. A flashlight catches your eye, its metal surface gleaming on an antique side table."
+Study:
+"Leather-bound books line mahogany shelves, and an old brass lamp flickers uncertainly. An aged journal rests open on the desk, its pages rustling in a nonexistent breeze."
+Master Bedroom:
+"Heavy velvet curtains frame clouded windows, and a four-poster bed looms in the darkness. Ornate candles stand arranged in a peculiar pattern on the bedside table."
+Library:
+"Towering bookshelves stretch into shadows above, and the musty scent of ancient knowledge fills the air. An ancient mirror hangs between the shelves, its surface rippling like water."
+Storage Room:
+"Cobwebs drape over forgotten treasures, and dust motes dance in the dim light. A box of matches sits conspicuously atop a stack of weathered crates."
+Conservatory:
+"Moonlight streams through cracked glass panels, illuminating overgrown plants. Among the twisted vines, magic crystals pulse with an inner light."
+Wine Cellar:
+"The temperature drops as you descend, and the walls seem to close in. A piece of ritual chalk rests on a barrel, marking it with strange symbols."
+Ritual Chamber:
+"An otherworldly energy pervades this circular room. Mysterious symbols cover the walls, waiting to be activated by the items you've gathered."
+
+
+
+When picking up and leaving with item:
+Living Room: "The flashlight's weight feels reassuring in your hand as you leave the living room behind."
+Study: "You clutch the journal close, its pages seeming to whisper secrets as you exit the study."
+Master Bedroom: "The candles' warmth seeps into your bones as you retreat from the bedroom's oppressive atmosphere."
+Library: "The mirror's surface ripples as you take it, distorting your reflection as you hurry from the library."
+Storage Room: "The matches rattle in their box as you pocket them, leaving the storage room's musty confines."
+Conservatory: "The crystals pulse in rhythm with your heartbeat as you depart the conservatory's green gloom."
+Wine Cellar: "The chalk leaves a faint residue on your fingers as you climb back up from the cellar's depths."
+
+
+When leaving without the item:
+Living Room: "You leave the flashlight behind, shadows seeming to deepen in your wake."
+Study: "The journal's pages flutter accusingly as you exit empty-handed."
+Master Bedroom: "The candles' flames dance mockingly as you retreat without them."
+Library: "The mirror's surface dims as you turn away, leaving its mysteries unclaimed."
+Storage Room: "The match box sits untouched as you withdraw from the cluttered space."
+Conservatory: "The crystals' glow seems to fade as you leave them among the twisting vines."
+Wine Cellar: "The chalk remains, its markings somehow darker in the cellar's gloom."
+Would you like me to adjust any of these descriptions to better match the game's atmosphere?

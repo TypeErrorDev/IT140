@@ -76,7 +76,7 @@ def menu():
                   \nGather the [7 Items] from the mansion,
                   \rComplete the [Ritual] in the Chambers,
                   \rBeat the Shadowy [Villain]
-                  \nThe note also includes a rough map of a large estate with various rooms marked.\r
+                  \nThe note also includes a rough map of a large estate with various rooms marked with one of the room labeled with a warning.\r
                   ''')
         elif choice == 'quit':
             print('Exiting the game...')
@@ -93,8 +93,11 @@ def living_room():
     global current_room
     current_room = 'Living Room'
     item = valid_rooms['Living Room']['Item']
-    input('what do you do: ')
-    
+    print('''
+        \nMoonlight filters through dusty windows, casting long shadows across Victorian furniture. \nA [flashlight] catches your eye, its metal surface gleaming on an antique side table.
+          \n[West] Move to the Study
+        ''')
+    choice = input('What do you want to do: ')
 
 def main():
     pass
