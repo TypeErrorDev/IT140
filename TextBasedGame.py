@@ -58,38 +58,46 @@ valid_rooms = {
 }
 
 def menu():
-    print('''
-        \r***** Intro To Scripting *****
-        \n[Start] Start the Game
-        \r[Help] Help Menu
-        \r[Quit] Quit the game''')       
+    while True:
+        print('''
+            \r***** Intro To Scripting *****
+            \n[Start] Start the Game
+            \r[Help] Help Menu
+            \r[Quit] Quit the game''')       
+            
+        choice = input('\nWhat do you want to do: ').strip().lower()
+        if choice == 'start':
+            print('Starting game...')
+            sleep(1)
+            living_room()
+        elif choice == 'help':
+            print('''
+                \nYou receive a mysterious package with no return address. Inside is a note with cryptic instructions:
+                  \nGather the [7 Items] from the mansion,
+                  \rComplete the [Ritual] in the Chambers,
+                  \rBeat the Shadowy [Villain]
+                  \nThe note also includes a rough map of a large estate with various rooms marked.\r
+                  ''')
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
+        else:
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
         
-    choice = input('\nWhat do you want to do: ').strip().lower()
-    if choice == 'start':
-        print('You clicked start')
-    elif choice == 'help':
-        print('You clicked help')
-    elif choice == 'quit':
-        print('Exiting the game...')
-        sys.exit()
-    else:
-        input('''****** ERROR ******
-            \nPlease choose only the options above.
-            \nPress ENTER to try again.''')
-        
-
-
-
-def main():
-    pass
-
 
 def living_room():
     global inventory
     global current_room
+    current_room = 'Living Room'
     item = valid_rooms['Living Room']['Item']
-    print(item)
+    input('what do you do: ')
     
+
+def main():
+    pass
 
 
 def study():
