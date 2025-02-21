@@ -1,267 +1,431 @@
 # Matthew Pantel
-# IT-140 Final Assignment
-
-# Code Style Guide: https://peps.python.org/pep-0008/
+# IT-140 
+# Week 7 Final Project
 
 import sys
+from time import sleep
 
-# global variables
+# Global Variables 
 inventory = []
 current_room = 'Living Room'
-valid_items = ['Flashlight', 'Old Journal', 'Ancient Mirror', 'Candles', 'Magic Crystals', 'Matches', 'Chalk']
 villain_room = 'Ritual Chamber'
-
-# Set the dictionary for the rooms and valid moves
-valid_moves = {
-    "Living Room": {"W": "Study", "E": "Library", "D": "Storage Room", "Q": "Quit"},
-    "Study": {"E": "Living Room", "Q": "Quit"}, 
-    "Library": {"W": "Living Room", "U": "Master Bedroom", "Q": "Quit"}, 
-    "Master Bedroom": {"D": "Library", "E": "Conservatory", "Q": "Quit"}, 
-    "Conservatory": {"W": "Master Bedroom", "Q": "Quit"}, 
-    "Storage Room": {"U": "Living Room", "W": "Ritual Chamber", "E": "Wine Cellar", "Q": "Quit"}, 
-    "Ritual Chamber": {"E": "Storage Room", "Q": "Quit"}, 
-    "Wine Cellar": {"W": "Storage Room", "Q": "Quit"} 
+valid_items = ['Flashlight', 'Old Journal', 'Ancient Mirror', 'Candles', 'Magic Crystals', 'Matches', 'Chalk']
+valid_rooms = {
+    'Living Room': {
+        'West': 'Study', 
+        'East': 'Library', 
+        'Downstairs': 'Storage Room', 
+        'Quit': 'Quit',
+        'Item': 'Flashlight'
+        },
+    'Study': {
+        'East': 'Living Room',
+        'Quit': 'Quit',
+        'Item': 'Old Journal'
+        },
+    'Library': {
+        'West': 'Living Room',
+        'Upstairs': 'Master Bedroom',
+        'Quit': 'Quit',
+        'Item': 'Ancient Mirror'
+        },
+    'Master Bedroom': {
+        'Downstairs': 'Library',
+        'East': 'Conservatory',
+        'Quit': 'Quit',
+        'Item': 'Candles'
+    },
+    'Conservatory': {
+        'West': 'Master Bedroom',
+        'Quit': 'Quit',
+        'Item': 'Magic Crystals'
+    },
+    'Storage Room':{
+        'West': 'Ritual Chamber', 
+        'East': 'Wine Cellar',
+        'Upstairs': 'Living Room',
+        'Quit': 'Quit',
+        'Item': 'Matches'
+    },
+    'Wine Cellar': {
+        'West': 'Storage Room',
+        'Quit': 'Quit',
+        'Item': 'Chalk'
+    },
+    'Ritual Chamber': {
+        'East': 'Storage Room',
+        'Quit': 'Quit'
+    }
 }
 
-# Room descriptions and items
-room_descriptions = {
-    "Living Room": "As you step into the Living Room, the air feels heavy with an eerie silence.\nShadows dance across the walls, and you notice a [Flashlight] lying on an old, dusty table.",
-    "Study": "The Study is filled with the scent of old books and parchment.\nA sense of foreboding hangs in the air, and you spot a [Old Journal] glinting on the desk under the dim light.",
-    "Library": "The Library is a labyrinth of towering bookshelves, filled with ancient tomes and forgotten knowledge.\nAmidst the dust and cobwebs, you notice an [Ancient Mirror] tucked between two books.",
-    "Master Bedroom": "The Master Bedroom is filled with an unsettling calm.\nOn the nightstand, you see a set of [Candles] that seem to flicker with an unnatural light.",
-    "Conservatory": "The Conservatory is filled with exotic plants and a strange, otherworldly glow.\nIn the center, you find a cluster of [Magic Crystals] that pulse with a faint light.",
-    "Storage Room": "The Storage Room is cluttered with old furniture and forgotten relics.\nAmong the debris, you find a box of [Matches] that might prove useful.",
-    "Ritual Chamber": "You have entered the Ritual Chamber. The air is thick with tension, and you can feel the presence of a dark force.",
-    "Wine Cellar": "The Wine Cellar is cold and damp, with the smell of aged wine filling the air.\nOn a dusty shelf, you find a piece of [Chalk] that might be useful for the ritual."
-}
+# Here is the main menu function. This will not only start the game, but quit the game as well. I use the sleep() method to counter the immediate printing of statments after a user provides a choice. 
 
-room_items = {
-    "Living Room": "Flashlight",
-    "Study": "Old Journal",
-    "Library": "Ancient Mirror",
-    "Master Bedroom": "Candles",
-    "Conservatory": "Magic Crystals",
-    "Storage Room": "Matches",
-    "Wine Cellar": "Chalk"
-}
-
-def move_rooms(current_room, direction):
-    if direction in valid_moves[current_room]:
-        new_room = valid_moves[current_room][direction]
-        if new_room == "Quit":
-            print('Exiting the game...')
-            sys.exit()
-        return new_room
-    else:
-        print("You are looking at the wall. Please turn around and try another way!")
-        return current_room
-
-def show_status(current_room):
-    print(room_descriptions[current_room])
-    if current_room in room_items and room_items[current_room] not in inventory:
-        print(f"\n[Item] Pick up the {room_items[current_room]}")
-    print("\r[Inventory] Check Your Inventory")
-    for direction in valid_moves[current_room]:
-        if direction == "Q":
-            print("\r[Q] Quit")
-        else:
-            print(f"\r[{direction}] Move {direction}")
-
-def get_user_choice():
+def menu():
+    print('''
+        \r***** Intro To Scripting *****
+        \n[Start] Start the Game
+        \r[Help] Help Menu
+        \r[Quit] Quit the game''')
+    
     while True:
-        choice = input('\nWhat would you like to do? ').lower().strip()
-        if choice in ['inventory', 'inv', 'enter', 'q', 'item'] or choice in ['w', 'e', 'd', 'u']:
-            return choice
+        choice = input('\nWhat do you want to do: ').strip().lower()
+        if choice == 'start':
+            print('Starting game...')
+            sleep(1)
+            living_room()
+            break
+        elif choice == 'help':
+            print('''
+                \nYou receive a mysterious package with no return address. Inside is a note with cryptic instructions:
+                  \nGather the [7 Items] from the mansion,
+                  \rComplete the [Ritual] in the Chambers,
+                  \rBeat the Shadowy [Villain]
+                  \nThe note also includes a rough map of a large estate with various rooms marked with one of the room labeled with a warning.\r
+                  ''')
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
             input('''****** ERROR ******
                 \nPlease choose only the options above.
                 \nPress ENTER to try again.''')
 
+# Functions for each room that handles the users input and validates the input. 
+# If the input is invalid, it'll throw a readable error
+
 def living_room():
+    global inventory
     global current_room
     current_room = 'Living Room'
-    while current_room == 'Living Room':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    item = valid_rooms['Living Room']['Item']
+    print('''
+        \nMoonlight filters through dusty windows, casting long shadows across Victorian furniture. \nA [flashlight] catches your eye, its metal surface gleaming on an antique side table.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[West] Move to the Study
+          \r[East] Move to the Library
+          \r[Downstairs] Move to the Storage Room
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'You have picked up the {item}.')
+            else:
+                print('You have already picked up this item.')
+        elif choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
+        elif choice == 'west':
+            study()
+            break
+        elif choice == 'east':
+            library()
+            break
+        elif choice == 'downstairs':
+            storage_room()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            current_room = move_rooms(current_room, choice.upper())
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
 
 def study():
+    global inventory
     global current_room
     current_room = 'Study'
-    while current_room == 'Study':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    item = valid_rooms['Study']['Item']
+    print('''
+        \nThe Study is filled with the scent of old books and parchment. \nA sense of foreboding hangs in the air, and you spot a [Old Journal] glinting on the desk under the dim light.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[East] Move to the Living Room
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'\nYou have picked up the {item}.')
+            else:
+                print('\nYou have already picked up this item.')
+        elif choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
+        elif choice == 'east':
+            living_room()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            current_room = move_rooms(current_room, choice.upper())
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
 
 def library():
+    global inventory
     global current_room
     current_room = 'Library'
-    while current_room == 'Library':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    item = valid_rooms['Library']['Item']
+    print('''
+        \nThe Library is a labyrinth of towering bookshelves, filled with ancient tomes and forgotten knowledge. \nAmidst the dust and cobwebs, you notice an [Ancient Mirror] tucked between two books.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[West] Move to the Living Room
+          \r[Upstairs] Move to the Master Bedroom
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'You have picked up the {item}.')
+            else:
+                print('You have already picked up this item.')
+        elif choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
+        elif choice == 'west':
+            living_room()
+            break
+        elif choice == 'upstairs':
+            master_bedroom()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            current_room = move_rooms(current_room, choice.upper())
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
 
 def master_bedroom():
+    global inventory
     global current_room
     current_room = 'Master Bedroom'
-    while current_room == 'Master Bedroom':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    item = valid_rooms['Master Bedroom']['Item']
+    print('''
+        \nThe Master Bedroom is filled with an unsettling calm. \nOn the nightstand, you see a set of [Candles] that seem to flicker with an unnatural light.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[Downstairs] Move to the Library
+          \r[East] Move to the Conservatory
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'You have picked up the {item}.')
+            else:
+                print('You have already picked up this item.')
+        elif choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
+        elif choice == 'downstairs':
+            library()
+            break
+        elif choice == 'east':
+            conservatory()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            current_room = move_rooms(current_room, choice.upper())
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
 
 def conservatory():
+    global inventory
     global current_room
     current_room = 'Conservatory'
-    while current_room == 'Conservatory':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    item = valid_rooms['Conservatory']['Item']
+    print('''
+        \nThe Conservatory is filled with exotic plants and a strange, otherworldly glow. \nIn the center, you find a cluster of [Magic Crystals] that pulse with a faint light.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[West] Move to the Master Bedroom
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'You have picked up the {item}.')
+            else:
+                print('You have already picked up this item.')
+        elif choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
+        elif choice == 'west':
+            master_bedroom()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            current_room = move_rooms(current_room, choice.upper())
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
 
 def storage_room():
+    global inventory
     global current_room
     current_room = 'Storage Room'
-    while current_room == 'Storage Room':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    item = valid_rooms['Storage Room']['Item']
+    print('''
+        \nThe Storage Room is cluttered with old furniture and forgotten relics. \nAmong the debris, you find a box of [Matches] that might prove useful.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[West] Move to the Ritual Chamber
+          \r[East] Move to the Wine Cellar
+          \r[Upstairs] Move to the Living Room
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'You have picked up the {item}.')
+            else:
+                print('You have already picked up this item.')
+        elif choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
+        elif choice == 'west':
+            ritual_chamber()
+            break
+        elif choice == 'east':
+            wine_cellar()
+            break
+        elif choice == 'upstairs':
+            living_room()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            current_room = move_rooms(current_room, choice.upper())
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
+
+def wine_cellar():
+    global inventory
+    global current_room
+    current_room = 'Wine Cellar'
+    item = valid_rooms['Wine Cellar']['Item']
+    print('''
+        \nThe Wine Cellar is cold and damp, with the smell of aged wine filling the air. \nOn a dusty shelf, you find a piece of [Chalk] that might be useful for the ritual.
+          \n[Item] Pick up the item
+          \r[Inventory] Check your inventory
+          \r[West] Move to the Storage Room
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'item':
+            if item not in inventory:
+                inventory.append(item)
+                print(f'You have picked up the {item}.')
+            else:
+                print('You have already picked up this item.')
+        elif choice == 'inventory':
+            if len(inventory) == 0:
+                print('Your inventory is empty.')
+            else:
+                print('Your inventory contains: ')
+                for item in inventory:
+                    print(f'- {item}')
+        elif choice == 'west':
+            storage_room()
+            break
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
+        else:
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
+
+# The Ritual Chamber is the End Game room. This is where the game will validate the user's inventory for all 7 items. If the user has all 7, then they win...if not, they'll lose the game and the game will exit. 
 
 def ritual_chamber():
+    global inventory
     global current_room
     current_room = 'Ritual Chamber'
-    while current_room == 'Ritual Chamber':
-        show_status(current_room)
-        choice = get_user_choice()
-        if choice == 'item' and room_items[current_room] not in inventory:
-            inventory.append(room_items[current_room])
-            print(f'You have picked up the {room_items[current_room]} and placed it in your bag!')
-        elif choice in ['inventory', 'inv']:
+    print('''
+        \nYou have entered the Ritual Chamber. The air is thick with tension, and you can feel the presence of a dark force.\nYou check your [Inventory] to see if you have all the items to perform the ritual.
+          \r[Inventory] Check your inventory
+          \r[Quit] Quit the game
+        ''')
+    while True:
+        choice = input('What do you want to do: ').strip().lower()
+        if choice == 'inventory':
             if len(inventory) == 0:
                 print('Your inventory is empty.')
             else:
                 print('Your inventory contains: ')
                 for item in inventory:
                     print(f'- {item}')
-        else:
-            current_room = move_rooms(current_room, choice.upper())
-            if current_room == villain_room:
-                if set(valid_items).issubset(set(inventory)):
-                    print('You have all the necessary items to complete the ritual and banish the darkness. You win!')
-                else:
-                    print('You do not have all the necessary items. The darkness consumes you and you lose!')
+            if set(valid_items).issubset(set(inventory)):
+                print('You have all the necessary items to complete the ritual and banish the darkness. You win!')
                 sys.exit()
-
-def menu():
-    print('''
-            \nAs you approach the Mansion, you feel a shiver roll down your\nspine and the hairs on your neck start to stand.\nYou place your foot on the first step and you hear a loud,\near ripping creak and the door slowly opens a bit.
-            \n[Inventory] Check Your Inventory
-            \r[Help] View the Help Menu
-            \r[Enter] Enter the Mansion
-            \r[Q] Quit
-            ''')
-    
-    choice = get_user_choice()
-    if choice == 'inventory' or choice == 'inv':
-        if len(inventory) == 0:
-            print('Your inventory is empty.')
+            else:
+                print('You do not have all the necessary items. The darkness consumes you and you lose!')
+                sys.exit()
+        elif choice == 'quit':
+            print('Exiting the game...')
+            sleep(1)
+            sys.exit()
         else:
-            print('Your inventory contains: ')
-            for item in inventory:
-                print(f'- {item}')
-    elif choice == 'help':
-        print('''
-            You receive a mysterious package with no return address. Inside is a note with cryptic instructions: “Enter the mansion. Collect the items. Avoid the shadow.” The note also includes a rough map of a large estate with various rooms marked. No further explanation is provided, but the handwriting is eerily familiar.
+            input('''****** ERROR ******
+                \nPlease choose only the options above.
+                \nPress ENTER to try again.''')
 
-            Curiosity compels you to investigate. Upon arriving at the mansion, you find the doors unlocked and the air thick with tension. As you explore, it becomes clear that the mansion holds more than just secrets—it’s filled with strange, useful items scattered across its rooms. However, there’s something else lurking in the shadows, an unseen presence that grows stronger the longer you stay.
-            ''')
-    elif choice == 'enter':
-        main()
-    elif choice == 'q':
-        print('Exiting the game...')
-        sys.exit()
-
-def main():
-    global current_room
-    while True:
-        if current_room == 'Living Room':
-            living_room()
-        elif current_room == 'Study':
-            study()
-        elif current_room == 'Library':
-            library()
-        elif current_room == 'Master Bedroom':
-            master_bedroom()
-        elif current_room == 'Conservatory':
-            conservatory()
-        elif current_room == 'Storage Room':
-            storage_room()
-        elif current_room == 'Ritual Chamber':
-            ritual_chamber()
-
+# The dunder main statement is here, since we are running this file directly, it'll tell the compiler which function to run first. If we add this file to a larger project, and run the app.js or another "starter" file, then this statement would be ignored.
 if __name__ == "__main__":
     menu()
